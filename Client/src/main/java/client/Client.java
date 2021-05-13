@@ -22,16 +22,26 @@ public class Client {
                         new InputStreamReader(socket.getInputStream()))) {
             while (running) {
                 try {
-                    Scanner s = new Scanner(System.in);
-                    String command = s.nextLine();
-                    String[] arguments = command.split(" ");
-                    if (arguments[0].equals("exit") || arguments[0].equals("stop")) {
-                        running = false;
-                    }
-
-                    out.println(command);
-//                    Waiting for response
+//                    Scanner s = new Scanner(System.in);
+//                    String command = s.nextLine();
+//                    String[] arguments = command.split(" ");
+//                    if (arguments[0].equals("exit") || arguments[0].equals("stop")) {
+//                        running = false;
+//                    }
+//
+//                    out.println(command);
+////                    Waiting for response
                     String response = in.readLine();
+                    if(response.equals("Your turn"))
+                    {
+                        Scanner s = new Scanner(System.in);
+                        String command = s.nextLine();
+                        // metoda miscare
+                        out.println(command);
+                        out.flush();
+                    }
+                    else
+                        continue;
                     System.out.println(response);
                 } catch (SocketException e)
                 {

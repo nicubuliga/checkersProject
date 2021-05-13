@@ -4,14 +4,12 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.text.SimpleDateFormat;
-import java.util.Base64;
-import java.util.Date;
+
 
 public class Server {
     DataUtil data;
     //     Define the port on which the server is listening
-    public static final int PORT = 8100;
+    public static final int PORT = 31401;
     public Server() throws IOException {
         DataUtil dataUtil = new DataUtil();
         data = dataUtil;
@@ -24,7 +22,13 @@ public class Server {
                 Socket socket = null;
                 try {
                     socket = serverSocket.accept();
-                    new ClientThread(socket, dataUtil).start();
+                    if(dataUtil.socketQueue != null && dataUtil.socketQueue.isConnected())
+                    {
+                        new ClientThread(data.socketQueue, socket, dataUtil).start();
+                        dataUtil.socketQueue = null;
+                    }
+                    else
+                        dataUtil.socketQueue = socket;
                 } catch (SocketTimeoutException e){
                 }
             }
