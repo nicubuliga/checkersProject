@@ -9,8 +9,8 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class Client {
-    String serverAddress = "127.0.0.1"; // The server's IP address
-    int PORT = 8100; // The server's port
+    String serverAddress = "5.56.79.21"; // The server's IP address
+    int PORT = 31401; // The server's port
     boolean running = true;
 
     public void communicate() throws IOException {
@@ -22,16 +22,15 @@ public class Client {
                         new InputStreamReader(socket.getInputStream()))) {
             while (running) {
                 try {
-//                    Scanner s = new Scanner(System.in);
-//                    String command = s.nextLine();
-//                    String[] arguments = command.split(" ");
-//                    if (arguments[0].equals("exit") || arguments[0].equals("stop")) {
-//                        running = false;
-//                    }
-//
-//                    out.println(command);
-////                    Waiting for response
+
                     String response = in.readLine();
+                    if(response.equals("test"))
+                    {
+                        out.println("ok");
+                        out.flush();
+                        continue;
+                    }
+                    System.out.println(response);
                     if(response.equals("Your turn"))
                     {
                         Scanner s = new Scanner(System.in);
@@ -42,13 +41,11 @@ public class Client {
                     }
                     else
                         continue;
-                    System.out.println(response);
                 } catch (SocketException e)
                 {
                     running = false;
                     System.out.println("Server disconnected");
                 }
-
             }
         } catch (UnknownHostException e) {
             System.err.println("No server listening... " + e);

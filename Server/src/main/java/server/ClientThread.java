@@ -35,11 +35,11 @@ class ClientThread extends Thread {
                     new InputStreamReader(socket2.getInputStream()));
             PrintWriter out2 = new PrintWriter(socket2.getOutputStream());
 
-
+            System.out.println("TOT NORMAL 1");
             while (running) {
 
                 try {
-                    String move = in.readLine();
+                    String move = null;
                     String raspuns = "Command not found";
                     if(turn)
                     {
@@ -51,7 +51,7 @@ class ClientThread extends Thread {
                     {
                         out2.println("Your turn");
                         out2.flush();
-                        move = in.readLine();
+                        move = in2.readLine();
                         turn = true;
                     }
                     // Send the response to the output stream: server → client
