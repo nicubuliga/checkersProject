@@ -34,15 +34,15 @@ public class ClientApp extends JFrame {
     }
 
     public void connect() throws IOException {
-        socket = new Socket(serverAddress, PORT);
-        out = new PrintWriter(socket.getOutputStream(), true);
-        in = new BufferedReader(
-                new InputStreamReader(socket.getInputStream()));
+//        socket = new Socket(serverAddress, PORT);
+//        out = new PrintWriter(socket.getOutputStream(), true);
+//        in = new BufferedReader(
+//                new InputStreamReader(socket.getInputStream()));
 
         Controller controller = new Controller(in, out);
 
-//        setup(controller);
-        new Thread(controller).start();
+        setup(controller);
+//        new Thread(controller).start();
     }
 
     public void setup(Controller controller)
