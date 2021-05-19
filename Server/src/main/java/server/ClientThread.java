@@ -35,7 +35,6 @@ class ClientThread extends Thread {
                     new InputStreamReader(socket2.getInputStream()));
             PrintWriter out2 = new PrintWriter(socket2.getOutputStream());
 
-            System.out.println("TOT NORMAL 1");
             while (running) {
 
                 try {
@@ -43,13 +42,13 @@ class ClientThread extends Thread {
                     String raspuns = "Command not found";
                     if(turn)
                     {
-                        out.println("Your turn");
+                        out.println("turn");
                         out.flush();
                         move = in.readLine();
                         turn = false;
                     } else
                     {
-                        out2.println("Your turn");
+                        out2.println("turn");
                         out2.flush();
                         move = in2.readLine();
                         turn = true;

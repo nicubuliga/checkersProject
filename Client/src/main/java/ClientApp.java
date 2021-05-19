@@ -23,8 +23,6 @@ public class ClientApp extends JFrame {
     public ClientApp ()
     {
         try {
-            String name = (String) JOptionPane.showInputDialog(null, "Enter your name to Connect", "Connect to Server",
-                    JOptionPane.OK_CANCEL_OPTION);
             connect();
         } catch (UnknownHostException e) {
             e.printStackTrace();

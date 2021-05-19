@@ -30,7 +30,8 @@ public class SquarePanel extends JPanel {
             g.fillRect(0, 0, getWidth(), getHeight());
         }
         try {
-            BufferedImage image = ImageIO.read(new File("piece.png"));
+            BufferedImage image = ImageIO.read(new File("pieceWhite.png"));
+            image = resize(image,70,70);
             g.drawImage(image,getWidth()/2 - image.getWidth()/2, getHeight()/2 - image.getHeight()/2, null );
         } catch (IOException e) {
             e.printStackTrace();
@@ -38,6 +39,17 @@ public class SquarePanel extends JPanel {
         g.setColor(Color.RED);
 //        int padding= 24;
 //        g.fillOval(padding/2, padding/2, getWidth()-padding, getHeight()-padding);
+    }
+
+    public static BufferedImage resize(BufferedImage img, int newW, int newH) {
+        Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
+        BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2d = dimg.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+
+        return dimg;
     }
 
 }

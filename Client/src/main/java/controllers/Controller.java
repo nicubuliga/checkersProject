@@ -11,7 +11,7 @@ public class Controller implements Runnable{
 
     private PrintWriter out;
     private BufferedReader in;
-
+    public int idPlayer ;
     boolean running = true;
 
 
@@ -31,15 +31,16 @@ public class Controller implements Runnable{
     public void run() {
         while (running) {
             try {
-                String response = in.readLine();
+                String responseServer = in.readLine();
+                String[] args = responseServer.split(" ");
+                String response = args[0];
+
                 if(response.equals("test"))
                 {
                     out.println("ok");
                     out.flush();
-                    continue;
-                }
-                System.out.println(response);
-                if(response.equals("Your turn"))
+                } else
+                if(response.equals("turn"))
                 {
                     Scanner s = new Scanner(System.in);
                     String command = s.nextLine();
@@ -47,6 +48,11 @@ public class Controller implements Runnable{
                     out.println(command);
                     out.flush();
                 }
+                else
+                    if(response.equals("start"))
+                    {
+                        this.idPlayer = Integer.parseInt(args[1]);
+                    }
             } catch (SocketException e)
             {
                 running = false;
