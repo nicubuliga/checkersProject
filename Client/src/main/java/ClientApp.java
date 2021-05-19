@@ -48,7 +48,7 @@ public class ClientApp extends JFrame {
         MyMouseListener listener = new MyMouseListener();
         listener.setController(controller);
 
-        boardPanel = new BoardPanel(listener);
+        boardPanel = new BoardPanel(listener , controller.idPlayer);
         controller.setBoardPanel(boardPanel);
         add(boardPanel);
     }

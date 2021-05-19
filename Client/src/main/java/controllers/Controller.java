@@ -11,7 +11,7 @@ public class Controller implements Runnable{
 
     private PrintWriter out;
     private BufferedReader in;
-    public int idPlayer ;
+    public int idPlayer = 1 ;
     boolean running = true;
 
 

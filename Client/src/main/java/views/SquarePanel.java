@@ -18,21 +18,24 @@ public class SquarePanel extends JPanel {
 //        g.fillRect(0, 0, getWidth(), getHeight());
 //    }
 
-    public SquarePanel (Square square)
-    {
+    public SquarePanel(Square square) {
         this.square = square;
     }
+
     @Override
     public void paint(Graphics g) {
-        if(square.getColumn() % 2 != square.getRow() % 2)
-        {
+        if (square.getColumn() % 2 != square.getRow() % 2) {
             g.setColor(Color.BLACK);
             g.fillRect(0, 0, getWidth(), getHeight());
         }
         try {
-            BufferedImage image = ImageIO.read(new File("pieceWhite.png"));
-            image = resize(image,70,70);
-            g.drawImage(image,getWidth()/2 - image.getWidth()/2, getHeight()/2 - image.getHeight()/2, null );
+            if (square.getIdPLayer() == 1)
+            {
+                paintPiece("pieceWhite.png",g);
+            }
+            if (square.getIdPLayer() == 2)
+                paintPiece("pieceBlack.png",g);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -52,4 +55,8 @@ public class SquarePanel extends JPanel {
         return dimg;
     }
 
+    public void paintPiece(String pathImage, Graphics g) throws IOException {
+        BufferedImage image = ImageIO.read(new File(pathImage));
+        g.drawImage(image, getWidth() / 2 - image.getWidth() / 2, getHeight() / 2 - image.getHeight() / 2, null);
+    }
 }
