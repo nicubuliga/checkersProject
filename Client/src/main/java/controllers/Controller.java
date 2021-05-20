@@ -9,15 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Controller implements Runnable{
+public class Controller implements Runnable {
 
     private PrintWriter out;
     private BufferedReader in;
-    private boolean currentPlayerTurn = true;
-    public int idPlayer = 1 ;
+    private boolean currentPlayerTurn = false;
+    public int idPlayer;
     private List<SquareModel> playableSquares = new ArrayList<>();
     private List<SquareModel> selectedSquares = new ArrayList<>();
     private boolean running = true;
+    private boolean waitingForAction;
 
     public PrintWriter getOut() {
         return out;
@@ -49,19 +50,17 @@ public class Controller implements Runnable{
 
     private BoardPanel boardPanel;
 
-    public Controller(BufferedReader bufferedReader, PrintWriter printWriter)
-    {
+    public Controller(BufferedReader bufferedReader, PrintWriter printWriter) {
         this.in = bufferedReader;
         this.out = printWriter;
     }
 
-    public void setBoardPanel(BoardPanel panel){
+    public void setBoardPanel(BoardPanel panel) {
         this.boardPanel = panel;
     }
 
-    public void selectSquare(SquareModel squareModel)
-    {
-        if(selectedSquares.isEmpty() && squareModel.getIdPLayer() != 0)
+    public void selectSquare(SquareModel squareModel) {
+        if (selectedSquares.isEmpty() && squareModel.getIdPLayer() != 0)
             addToSelected(squareModel);
         else {
             System.out.println(playableSquares);
@@ -76,14 +75,13 @@ public class Controller implements Runnable{
 
     }
 
-    public void deselectSquare()
-    {
-        for(SquareModel square:selectedSquares)
+    public void deselectSquare() {
+        for (SquareModel square : selectedSquares)
             square.setSelected(false);
 
         selectedSquares.clear();
 
-        for(SquareModel square:playableSquares){
+        for (SquareModel square : playableSquares) {
             square.setMutable(false);
         }
 
@@ -92,47 +90,69 @@ public class Controller implements Runnable{
         boardPanel.repaintPanels();
     }
 
-    private void addToSelected(SquareModel squareModel)
-    {
+    private void addToSelected(SquareModel squareModel) {
         squareModel.setSelected(true);
         selectedSquares.add(squareModel);
         getPlayableSquares(squareModel);
     }
 
-    private void getPlayableSquares(SquareModel squareModel)
-    {
+    private void getPlayableSquares(SquareModel squareModel) {
         playableSquares.clear();
         playableSquares = boardPanel.getPlayableSquares(squareModel);
 
         boardPanel.repaintPanels();
     }
 
-    private void checkCrossJump(SquareModel from, SquareModel to){
-        if(Math.abs(from.getRow()-to.getRow())==2){
-            int middleRow = (from.getRow() + to.getRow())/2;
-            int middleCol = (from.getColumn() + to.getColumn())/2;
+    private void checkCrossJump(SquareModel from, SquareModel to) {
+        if (Math.abs(from.getRow() - to.getRow()) == 2) {
+            int middleRow = (from.getRow() + to.getRow()) / 2;
+            int middleCol = (from.getColumn() + to.getColumn()) / 2;
 
-            SquareModel middleSquare = boardPanel.getSquare((middleRow*8)+middleCol);
+            SquareModel middleSquare = boardPanel.getSquare((middleRow * 8) + middleCol);
             middleSquare.setIdPLayer(0);
 //            middleSquare.removeKing();
         }
     }
 
 
-    public void move(SquareModel from, SquareModel to){
+    public void move(SquareModel from, SquareModel to) {
         to.setIdPLayer(from.getIdPLayer());
         from.setIdPLayer(0);
         checkCrossJump(from, to);
 //        checkKing(from, to);
         deselectSquare();
 
-//        waitingForAction = false;
-//        try {
-//            sendMove(from, to);
-//        } catch (IOException e) {
-//            System.out.println("Sending failed");
-//        }
+        waitingForAction = false;
+        try {
+            sendMove(from, to);
+        } catch (IOException e) {
+            System.out.println("Sending failed");
+        }
     }
+
+    // 55 43
+    private void sendMove(SquareModel from, SquareModel to) throws IOException {
+        if (this.idPlayer == 2) {
+            String firstPos = (7 - from.getRow()) + (7 - from.getColumn()) + "";
+            String secondPos = (7 - to.getRow()) + (7 - to.getColumn()) + "";
+            out.println(firstPos + " " + secondPos);
+        } else {
+            String firstPos = from.getRow() + from.getColumn() + "";
+            String secondPos = to.getRow() + to.getColumn() + "";
+            out.println(firstPos + " " + secondPos);
+        }
+    }
+
+    private void waitForAction() throws InterruptedException {
+        this.currentPlayerTurn = true;
+        while (waitingForAction) {
+            Thread.sleep(100);
+        }
+
+        waitingForAction = false;
+
+    }
+
     @Override
     public void run() {
         while (running) {
@@ -141,29 +161,18 @@ public class Controller implements Runnable{
                 String[] args = responseServer.split(" ");
                 String response = args[0];
 
-                if(response.equals("test"))
-                {
+                if (response.equals("test")) {
                     out.println("ok");
                     out.flush();
-                } else
-                if(response.equals("turn"))
-                {
-                    Scanner s = new Scanner(System.in);
-                    String command = s.nextLine();
-                    // metoda miscare
-                    out.println(command);
-                    out.flush();
+                } else if (response.equals("turn")) {
+                    waitForAction();
+                } else if (response.equals("start")) {
+                    this.idPlayer = Integer.parseInt(args[1]);
                 }
-                else
-                    if(response.equals("start"))
-                    {
-                        this.idPlayer = Integer.parseInt(args[1]);
-                    }
-            } catch (SocketException e)
-            {
+            } catch (SocketException e) {
                 running = false;
                 System.out.println("Server disconnected");
-            } catch (IOException e) {
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
         }
