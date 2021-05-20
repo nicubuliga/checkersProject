@@ -1,6 +1,7 @@
 package views;
 
-import models.Square;
+import controllers.MyMouseListener;
+import models.SquareModel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -11,29 +12,48 @@ import java.io.IOException;
 
 public class SquarePanel extends JPanel {
 
-    private Square square;
-//    @Override
-//    protected void paintComponent(Graphics g) {
-//        g.setColor(Color.GREEN);
-//        g.fillRect(0, 0, getWidth(), getHeight());
-//    }
+    private SquareModel squareModel;
 
-    public SquarePanel(Square square) {
-        this.square = square;
+    public SquareModel getSquare() {
+        return squareModel;
     }
+
+    public void setSquare(SquareModel squareModel) {
+        this.squareModel = squareModel;
+    }
+
+    public SquarePanel(SquareModel squareModel) {
+        this.squareModel = squareModel;
+    }
+
+//    public void setListner(MyMouseListener MyListner){
+////        setListener();
+//        if(squareModel.isMutable() || squareModel.getIdPLayer()==1){
+//            this.removeMouseListener(MyListner);
+//            this.addMouseListener(MyListner);
+//        }else{
+//            this.removeMouseListener(MyListner);
+//        }
+//    }
 
     @Override
     public void paint(Graphics g) {
-        if (square.getColumn() % 2 != square.getRow() % 2) {
-            g.setColor(Color.BLACK);
+        if (squareModel.getColumn() % 2 != squareModel.getRow() % 2) {
+            g.setColor(new Color(181,136,99));
             g.fillRect(0, 0, getWidth(), getHeight());
         }
+        else
+        {
+            g.setColor(new Color(240,217,181));
+            g.fillRect(0, 0, getWidth(), getHeight());
+        }
+
         try {
-            if (square.getIdPLayer() == 1)
+            if (squareModel.getIdPLayer() == 1)
             {
                 paintPiece("pieceWhite.png",g);
             }
-            if (square.getIdPLayer() == 2)
+            if (squareModel.getIdPLayer() == 2)
                 paintPiece("pieceBlack.png",g);
 
         } catch (IOException e) {
@@ -44,7 +64,7 @@ public class SquarePanel extends JPanel {
 //        g.fillOval(padding/2, padding/2, getWidth()-padding, getHeight()-padding);
     }
 
-    public static BufferedImage resize(BufferedImage img, int newW, int newH) {
+    public BufferedImage resizeImg(BufferedImage img, int newW, int newH) {
         Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
         BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
 
@@ -57,6 +77,7 @@ public class SquarePanel extends JPanel {
 
     public void paintPiece(String pathImage, Graphics g) throws IOException {
         BufferedImage image = ImageIO.read(new File(pathImage));
+        image = resizeImg(image,70,70);
         g.drawImage(image, getWidth() / 2 - image.getWidth() / 2, getHeight() / 2 - image.getHeight() / 2, null);
     }
 }

@@ -1,8 +1,26 @@
 package models;
 
-public class Square {
+public class SquareModel {
     private int row;
     private int column;
+    private boolean isSelected = false;
+    private boolean isMutable = false;
+
+    public boolean isMutable() {
+        return isMutable;
+    }
+
+    public void setMutable(boolean mutable) {
+        isMutable = mutable;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
 
     public int getIdPLayer() {
         return idPLayer;
@@ -13,7 +31,7 @@ public class Square {
     }
 
     private int idPLayer;
-    public Square(int row, int column) {
+    public SquareModel(int row, int column) {
 
         this.row = row;
         this.column = column;
