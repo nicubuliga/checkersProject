@@ -10,7 +10,7 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class ClientApp extends JFrame {
-    String serverAddress = "127.0.0.1"; // The server's IP address
+    String serverAddress = "5.56.79.21"; // The server's IP address
     int PORT = 31401; // The server's port
     Socket socket = null;
 
@@ -32,15 +32,15 @@ public class ClientApp extends JFrame {
     }
 
     public void connect() throws IOException {
-//        socket = new Socket(serverAddress, PORT);
-//        out = new PrintWriter(socket.getOutputStream(), true);
-//        in = new BufferedReader(
-//                new InputStreamReader(socket.getInputStream()));
+        socket = new Socket(serverAddress, PORT);
+        out = new PrintWriter(socket.getOutputStream(), true);
+        in = new BufferedReader(
+                new InputStreamReader(socket.getInputStream()));
 
         Controller controller = new Controller(in, out);
 
         setup(controller);
-//        new Thread(controller).start();
+        new Thread(controller).start();
     }
 
     public void setup(Controller controller)

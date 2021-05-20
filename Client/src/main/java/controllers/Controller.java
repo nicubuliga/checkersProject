@@ -14,7 +14,7 @@ public class Controller implements Runnable {
     private PrintWriter out;
     private BufferedReader in;
     private boolean currentPlayerTurn = false;
-    public int idPlayer;
+    public int idPlayer = 1;
     private List<SquareModel> playableSquares = new ArrayList<>();
     private List<SquareModel> selectedSquares = new ArrayList<>();
     private boolean running = true;
@@ -110,7 +110,6 @@ public class Controller implements Runnable {
 
             SquareModel middleSquare = boardPanel.getSquare((middleRow * 8) + middleCol);
             middleSquare.setIdPLayer(0);
-//            middleSquare.removeKing();
         }
     }
 
@@ -133,12 +132,13 @@ public class Controller implements Runnable {
     // 55 43
     private void sendMove(SquareModel from, SquareModel to) throws IOException {
         if (this.idPlayer == 2) {
-            String firstPos = (7 - from.getRow()) + (7 - from.getColumn()) + "";
-            String secondPos = (7 - to.getRow()) + (7 - to.getColumn()) + "";
+            String firstPos = (7 - from.getRow()) + "" + (7 - from.getColumn());
+            String secondPos = (7 - to.getRow()) + "" + (7 - to.getColumn());
             out.println(firstPos + " " + secondPos);
         } else {
-            String firstPos = from.getRow() + from.getColumn() + "";
-            String secondPos = to.getRow() + to.getColumn() + "";
+            String firstPos = from.getRow() + "" + from.getColumn();
+            String secondPos = to.getRow() + "" + to.getColumn();
+
             out.println(firstPos + " " + secondPos);
         }
     }
