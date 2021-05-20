@@ -20,6 +20,7 @@ public class Controller implements Runnable {
     private boolean running = true;
     private boolean waitingForAction;
 
+
     public PrintWriter getOut() {
         return out;
     }
@@ -150,7 +151,20 @@ public class Controller implements Runnable {
         }
 
         waitingForAction = false;
+        this.currentPlayerTurn = false;
 
+    }
+
+    private void makeMoveFromServer(int from, int to)
+    {
+        SquareModel fromSquare = boardPanel.getBoardModel().getSquare(from/10 , from % 10);
+        SquareModel toSquare = boardPanel.getBoardModel().getSquare(to/10 , to % 10);
+
+        toSquare.setIdPLayer(fromSquare.getIdPLayer());
+        fromSquare.setIdPLayer(0);
+        checkCrossJump(fromSquare, toSquare);
+//        checkKing(from, to);
+        deselectSquare();
     }
 
     @Override
@@ -165,6 +179,9 @@ public class Controller implements Runnable {
                     out.println("ok");
                     out.flush();
                 } else if (response.equals("turn")) {
+                    if(args.length > 1) {
+                        makeMoveFromServer(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+                    }
                     waitForAction();
                 } else if (response.equals("start")) {
                     this.idPlayer = Integer.parseInt(args[1]);

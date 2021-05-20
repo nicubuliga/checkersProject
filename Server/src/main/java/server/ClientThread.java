@@ -34,23 +34,26 @@ class ClientThread extends Thread {
             BufferedReader in2 = new BufferedReader(
                     new InputStreamReader(socket2.getInputStream()));
             PrintWriter out2 = new PrintWriter(socket2.getOutputStream());
+            String move = "";
 
             while (running) {
 
                 try {
-                    String move = null;
+
                     String raspuns = "Command not found";
                     if(turn)
                     {
-                        out.println("turn");
+                        out.println("turn "+move);
                         out.flush();
                         move = in.readLine();
+                        System.out.println(move);
                         turn = false;
                     } else
                     {
-                        out2.println("turn");
+                        out2.println("turn "+move);
                         out2.flush();
                         move = in2.readLine();
+                        System.out.println(move);
                         turn = true;
                     }
                     // Send the response to the output stream: server → client
