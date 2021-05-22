@@ -196,7 +196,7 @@ public class Controller implements Runnable {
                 } else if (response.equals("start")) {
                     this.idPlayer = Integer.parseInt(args[1]);
                     boardPanel.getBoardModel().setIdPlayer(idPlayer);
-                    boardPanel.repaint();
+                    boardPanel.overwriteSquares();
                 }
             } catch (SocketException e) {
                 running = false;

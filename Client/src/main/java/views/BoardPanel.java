@@ -42,6 +42,18 @@ public class BoardPanel extends JPanel {
         repaint();
     }
 
+    public void overwriteSquares()
+    {
+        int index = 0;
+        for(int i=0; i < 8; ++i)
+            for(int k = 0; k < 8; k++)
+            {
+                panels.get(index).setSquare(boardModel.getSquare(i,k));
+                index++;
+            }
+        repaint();
+    }
+
     public void repaintPanels(){
 //        for(SquarePanel panel : panels){
 //            panel.setListner(listener);
