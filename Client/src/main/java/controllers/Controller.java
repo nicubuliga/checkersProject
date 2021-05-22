@@ -148,7 +148,7 @@ public class Controller implements Runnable {
         if(from.isKing()){
             movedSquare.setKing(true);
             from.setKing(false);
-        }else if(movedSquare.getRow()==7 && movedSquare.getRow()==0){
+        }else if(movedSquare.getRow()==7 || movedSquare.getRow()==0){
             movedSquare.setKing(true);
         }
     }
@@ -195,6 +195,8 @@ public class Controller implements Runnable {
                     waitForAction();
                 } else if (response.equals("start")) {
                     this.idPlayer = Integer.parseInt(args[1]);
+                    boardPanel.getBoardModel().setIdPlayer(idPlayer);
+                    boardPanel.repaint();
                 }
             } catch (SocketException e) {
                 running = false;

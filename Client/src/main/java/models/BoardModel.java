@@ -5,6 +5,12 @@ import java.util.List;
 
 public class BoardModel {
     private SquareModel[][] squares;
+
+    public void setIdPlayer(int idPlayer) {
+        this.idPlayer = idPlayer;
+        initBoard(idPlayer);
+    }
+
     private int idPlayer;
 
     public BoardModel(int idPlayer) {
