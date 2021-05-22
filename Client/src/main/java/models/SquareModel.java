@@ -5,6 +5,15 @@ public class SquareModel {
     private int column;
     private boolean isSelected = false;
     private boolean isMutable = false;
+    private boolean isKing = false;
+
+    public boolean isKing() {
+        return isKing;
+    }
+
+    public void setKing(boolean king) {
+        isKing = king;
+    }
 
     public boolean isMutable() {
         return isMutable;

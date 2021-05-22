@@ -39,11 +39,11 @@ public class BoardModel {
         //check two front squares
         twoFrontSquares(playableSquares, movableRow, selectedCol);
         crossJumpFront(playableSquares, movableRow - 1, selectedCol, movableRow);
-        /*if(selectedSquare.isKing()){
-            movableRow = (selectedSquare.getPlayerID()==1) ? selectedRow-1 : selectedRow+1;
+        if(squareModel.isKing()){
+            movableRow = selectedRow + 1;
             twoFrontSquares(playableSquares, movableRow , selectedCol);
-            crossJumpFront(playableSquares, (selectedSquare.getPlayerID()==1) ? movableRow-1 : movableRow+1, selectedCol, movableRow);
-        }*/
+            crossJumpFront(playableSquares, movableRow+1, selectedCol, movableRow);
+        }
         return playableSquares;
     }
 

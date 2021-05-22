@@ -51,9 +51,15 @@ public class SquarePanel extends JPanel {
         try {
             if (squareModel.getIdPLayer() == 1)
             {
+                if(squareModel.isKing())
+                    paintPiece("whiteKing.png",g);
+                else
                 paintPiece("pieceWhite.png",g);
             }
             if (squareModel.getIdPLayer() == 2)
+                if(squareModel.isKing())
+                    paintPiece("blackKing.png",g);
+                else
                 paintPiece("pieceBlack.png",g);
 
         } catch (IOException e) {

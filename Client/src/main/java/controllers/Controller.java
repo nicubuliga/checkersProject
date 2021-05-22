@@ -119,7 +119,7 @@ public class Controller implements Runnable {
         to.setIdPLayer(from.getIdPLayer());
         from.setIdPLayer(0);
         checkCrossJump(from, to);
-//        checkKing(from, to);
+        checkKing(from, to);
         deselectSquare();
 
         waitingForAction = false;
@@ -144,6 +144,15 @@ public class Controller implements Runnable {
         }
     }
 
+    private void checkKing(SquareModel from, SquareModel movedSquare){
+        if(from.isKing()){
+            movedSquare.setKing(true);
+            from.setKing(false);
+        }else if(movedSquare.getRow()==7 && movedSquare.getRow()==0){
+            movedSquare.setKing(true);
+        }
+    }
+
     private void waitForAction() throws InterruptedException {
         this.currentPlayerTurn = true;
         while (waitingForAction) {
@@ -163,7 +172,7 @@ public class Controller implements Runnable {
         toSquare.setIdPLayer(fromSquare.getIdPLayer());
         fromSquare.setIdPLayer(0);
         checkCrossJump(fromSquare, toSquare);
-//        checkKing(from, to);
+        checkKing(fromSquare, toSquare);
         deselectSquare();
     }
 
