@@ -1,5 +1,7 @@
 package server;
 
+import server.models.Board;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,11 +12,13 @@ import java.net.SocketException;
 class ClientThread extends Thread {
     private Socket socket1 = null;
     private Socket socket2 = null;
+    private Board gameBoard;
     boolean running = true;
     boolean turn = true;
     DataUtil dataUtil;
 
     public ClientThread(Socket socket1, Socket socket2, DataUtil dataUtil) throws SocketException {
+        this.gameBoard = new Board();
         this.socket1 = socket1;
         this.socket1.setSoTimeout(90000);
         this.socket2 = socket2;
@@ -44,25 +48,36 @@ class ClientThread extends Thread {
                 try {
 
                     String raspuns = "Command not found";
-                    if(turn)
-                    {
-                        out.println("turn "+move);
+                    if (turn) {
+                        out.println("turn " + move);
                         out.flush();
                         move = in.readLine();
+                        gameBoard.makeMove(move);
+
+                        if(gameBoard.checkWinner() != 0) {
+                            out.println("GameOver");
+                            out.flush();
+                        }
+
                         System.out.println(move);
                         turn = false;
-                    } else
-                    {
-                        out2.println("turn "+move);
+                    } else {
+                        out2.println("turn " + move);
                         out2.flush();
                         move = in2.readLine();
+                        gameBoard.makeMove(move);
+
+                        if(gameBoard.checkWinner() != 0) {
+                            out2.println("GameOver");
+                            out2.flush();
+                        }
+
                         System.out.println(move);
                         turn = true;
                     }
                     // Send the response to the output stream: server → client
 
-                } catch (IOException e)
-                {
+                } catch (IOException e) {
                     running = false;
                     out.println("Disconnected");
                 }

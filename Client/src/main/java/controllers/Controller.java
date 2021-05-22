@@ -199,6 +199,8 @@ public class Controller implements Runnable {
                     boardPanel.overwriteSquares();
 //                    boardPanel.repaint();
 //                    boardPanel.repaintPanels();
+                } else if (response.equals("GameOver")) {
+                    System.out.println(response);
                 }
             } catch (SocketException e) {
                 running = false;
