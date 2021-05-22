@@ -36,7 +36,9 @@ class ClientThread extends Thread {
             PrintWriter out2 = new PrintWriter(socket2.getOutputStream());
             String move = "";
             out.println("start 1");
-            out.println("start 2");
+            out.flush();
+            out2.println("start 2");
+            out2.flush();
             while (running) {
 
                 try {

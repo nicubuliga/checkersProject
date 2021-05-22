@@ -13,7 +13,7 @@ public class Controller implements Runnable {
 
     private PrintWriter out;
     private BufferedReader in;
-    private boolean currentPlayerTurn = true;
+    private boolean currentPlayerTurn = false;
     public int idPlayer = 1;
     private List<SquareModel> playableSquares = new ArrayList<>();
     private List<SquareModel> selectedSquares = new ArrayList<>();
@@ -197,6 +197,8 @@ public class Controller implements Runnable {
                     this.idPlayer = Integer.parseInt(args[1]);
                     boardPanel.getBoardModel().setIdPlayer(idPlayer);
                     boardPanel.overwriteSquares();
+//                    boardPanel.repaint();
+//                    boardPanel.repaintPanels();
                 }
             } catch (SocketException e) {
                 running = false;
