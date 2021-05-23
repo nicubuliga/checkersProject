@@ -69,7 +69,7 @@ public class Server {
                     new InputStreamReader(socket.getInputStream()));
             PrintWriter out = new PrintWriter(socket.getOutputStream());
             out.println("type");
-
+            out.flush();
             return in.readLine();
         } catch (IOException exception) {
             exception.printStackTrace();
