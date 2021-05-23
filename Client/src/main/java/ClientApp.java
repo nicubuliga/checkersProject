@@ -10,7 +10,7 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class ClientApp extends JFrame {
-    String serverAddress = "127.0.0.1"; // The server's IP address
+    String serverAddress = "5.56.79.21"; // The server's IP address
     int PORT = 31401; // The server's port
     Socket socket = null;
 
@@ -19,10 +19,14 @@ public class ClientApp extends JFrame {
 
     private PrintWriter out;
     private BufferedReader in;
+    private String opponent;
 
     public ClientApp ()
     {
         try {
+            opponent = (String) JOptionPane.showInputDialog(null, "AI or Real Player", "Type",
+                    JOptionPane.OK_CANCEL_OPTION);
+
             connect();
         } catch (UnknownHostException e) {
             e.printStackTrace();
@@ -36,6 +40,9 @@ public class ClientApp extends JFrame {
         out = new PrintWriter(socket.getOutputStream(), true);
         in = new BufferedReader(
                 new InputStreamReader(socket.getInputStream()));
+
+        String type = in.readLine();
+        out.println(opponent);
 
         Controller controller = new Controller(in, out);
 
