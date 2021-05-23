@@ -111,6 +111,7 @@ public class Controller implements Runnable {
 
             SquareModel middleSquare = boardPanel.getSquare((middleRow * 8) + middleCol);
             middleSquare.setIdPLayer(0);
+            middleSquare.setKing(false);
         }
     }
 

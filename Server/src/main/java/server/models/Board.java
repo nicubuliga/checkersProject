@@ -22,13 +22,24 @@ public class Board {
             }
     }
 
-    public void makeMove(String move) {
+    public void makeMove(String move,int idPlayer) {
         String[] moves = move.split(" ");
         int from = Integer.parseInt(moves[0]);
+        int fromRow = from / 10;
+        int fromCol = from % 10;
         int to = Integer.parseInt(moves[1]);
+        int toRow = to / 10;
+        int toCol = to % 10;
+        if(idPlayer == 1)
+        {
+            fromRow = 7 - fromRow;
+            fromCol = 7 - fromCol;
+            toRow = 7 - toRow;
+            toCol = 7 - toCol;
+        }
 
-        Square fromSquare = squares[from / 10][from % 10];
-        Square toSquare = squares[to / 10][to % 10];
+        Square fromSquare = squares[fromRow][fromCol];
+        Square toSquare = squares[toRow][toCol];
 
         checkKing(fromSquare, toSquare);
 
@@ -46,6 +57,7 @@ public class Board {
 
             Square middleSquare = squares[middleRow][middleCol];
             middleSquare.setIdPlayer(0);
+            middleSquare.setKing(false);
         }
     }
 
@@ -56,10 +68,13 @@ public class Board {
             for (int j = 0; j < 8; ++j)
                 if (squares[i][j].getIdPlayer() == 1) {
                     nrWhiteMoves += nrPlayableSquares(squares[i][j]);
-                } else {
+                } else
+                    if(squares[i][j].getIdPlayer() == 2)
+                {
                     nrBlackMoves += nrPlayableSquares(squares[i][j]);
                 }
-
+        System.out.println("nr black: "+nrBlackMoves);
+        System.out.println("nr white: "+nrWhiteMoves);
         if(nrBlackMoves == 0) return 1;
         if(nrWhiteMoves == 0) return 2;
 
@@ -81,9 +96,9 @@ public class Board {
         twoFrontSquares(playableSquares, movableRow, selectedCol);
 
         if (square.getIdPlayer() == 1)
-            crossJumpFront(playableSquares, movableRow - 1, selectedCol, movableRow);
+            crossJumpFront(playableSquares, movableRow - 1, selectedCol, movableRow, square.getIdPlayer());
         else
-            crossJumpFront(playableSquares, movableRow + 1, selectedCol, movableRow);
+            crossJumpFront(playableSquares, movableRow + 1, selectedCol, movableRow, square.getIdPlayer());
 
         if (square.isKing()) {
             if (square.getIdPlayer() == 1)
@@ -92,9 +107,9 @@ public class Board {
                 movableRow = selectedRow - 1;
             twoFrontSquares(playableSquares, movableRow, selectedCol);
             if (square.getIdPlayer() == 1)
-                crossJumpFront(playableSquares, movableRow + 1, selectedCol, movableRow);
+                crossJumpFront(playableSquares, movableRow + 1, selectedCol, movableRow, square.getIdPlayer());
             else
-                crossJumpFront(playableSquares, movableRow - 1, selectedCol, movableRow);
+                crossJumpFront(playableSquares, movableRow - 1, selectedCol, movableRow, square.getIdPlayer());
         }
         return playableSquares.size();
     }
@@ -130,18 +145,17 @@ public class Board {
         }
     }
 
-    private void crossJumpFront(List<Square> pack, int movableRow, int selectedCol, int middleRow) {
-
-        int idPlayer = squares[middleRow][selectedCol].getIdPlayer();
+    private void crossJumpFront(List<Square> pack, int movableRow, int selectedCol, int middleRow, int currentPLayer) {
 
         int middleCol;
 
         if (movableRow >= 0 && movableRow < 8) {
+
             //right upper Corner
             if (selectedCol >= 0 && selectedCol < 6) {
                 Square rightCorner = squares[movableRow][selectedCol + 2];
                 middleCol = selectedCol + 1;
-                if (rightCorner.getIdPlayer() == 0 && isOpponentInbetween(middleRow, middleCol, 3 - idPlayer)) {
+                if (rightCorner.getIdPlayer() == 0 && isOpponentInbetween(middleRow, middleCol, currentPLayer)) {
                     pack.add(rightCorner);
                 }
             }
@@ -150,7 +164,7 @@ public class Board {
             if (selectedCol > 1 && selectedCol <= 7) {
                 Square leftCorner = squares[movableRow][selectedCol - 2];
                 middleCol = selectedCol - 1;
-                if (leftCorner.getIdPlayer() == 0 && isOpponentInbetween(middleRow, middleCol, 3 - idPlayer)) {
+                if (leftCorner.getIdPlayer() == 0 && isOpponentInbetween(middleRow, middleCol, currentPLayer)) {
                     pack.add(leftCorner);
                 }
             }

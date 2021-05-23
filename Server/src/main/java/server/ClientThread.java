@@ -52,11 +52,13 @@ class ClientThread extends Thread {
                         out.println("turn " + move);
                         out.flush();
                         move = in.readLine();
-                        gameBoard.makeMove(move);
+                        gameBoard.makeMove(move,1);
 
                         if(gameBoard.checkWinner() != 0) {
                             out.println("GameOver");
                             out.flush();
+                            out2.println("GameOver");
+                            out2.println();
                         }
 
                         System.out.println(move);
@@ -65,11 +67,13 @@ class ClientThread extends Thread {
                         out2.println("turn " + move);
                         out2.flush();
                         move = in2.readLine();
-                        gameBoard.makeMove(move);
+                        gameBoard.makeMove(move,2);
 
                         if(gameBoard.checkWinner() != 0) {
                             out2.println("GameOver");
                             out2.flush();
+                            out.println("GameOver");
+                            out.println();
                         }
 
                         System.out.println(move);
