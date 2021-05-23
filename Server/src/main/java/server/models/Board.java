@@ -5,12 +5,33 @@ import java.util.List;
 
 public class Board{
     private Square[][] squares;
+    private int nrWhitePiece = 0;
+    private int nrBlackPiece = 0;
+    private int nrWhiteKing = 0;
+    private int nrBlackKing = 0;
+
+    public int getNrWhitePiece() {
+        return nrWhitePiece;
+    }
+
+    public int getNrBlackPiece() {
+        return nrBlackPiece;
+    }
+
+    public int getNrWhiteKing() {
+        return nrWhiteKing;
+    }
+
+    public int getNrBlackKing() {
+        return nrBlackKing;
+    }
 
     public Board() {
         squares = new Square[8][8];
         initBoard();
     }
 
+    //copy constructor
     public Board(Board board)
     {
         squares = new Square[8][8];
@@ -20,6 +41,10 @@ public class Board{
                 this.squares[i][j] = new Square(i,j);
                 this.squares[i][j].setKing(board.getSquares()[i][j].isKing());
                 this.squares[i][j].setIdPlayer(board.getSquares()[i][j].getIdPlayer());
+                this.nrWhitePiece = board.getNrWhitePiece();
+                this.nrBlackPiece = board.getNrBlackPiece();
+                this.nrWhiteKing = board.getNrWhiteKing();
+                this.nrBlackKing = board.getNrBlackKing();
             }
     }
 
@@ -32,9 +57,15 @@ public class Board{
             for (int j = 0; j < 8; ++j) {
                 squares[i][j] = new Square(i, j);
                 if (i % 2 != j % 2 && i < 3) {
-                    squares[i][j].setIdPlayer(2);
+                    {
+                        squares[i][j].setIdPlayer(2);
+                        nrBlackPiece++;
+                    }
                 } else if (i % 2 != j % 2 && i > 4)
+                {
                     squares[i][j].setIdPlayer(1);
+                    nrWhitePiece++;
+                }
             }
     }
 
@@ -58,7 +89,13 @@ public class Board{
 
         checkKing(fromSquare, toSquare);
 
+        if(toSquare.getIdPlayer() == 1)
+            nrWhitePiece--;
+        else
+            if(toSquare.getIdPlayer() == 2)
+                nrBlackPiece--;
         toSquare.setIdPlayer(fromSquare.getIdPlayer());
+
         fromSquare.setIdPlayer(0);
 
         checkJump(fromSquare, toSquare);
@@ -71,6 +108,19 @@ public class Board{
             int middleCol = (from.getColumn() + to.getColumn()) / 2;
 
             Square middleSquare = squares[middleRow][middleCol];
+
+            if(middleSquare.getIdPlayer() == 1)
+            {
+                nrWhitePiece--;
+                if(middleSquare.isKing())
+                    nrWhiteKing--;
+            }
+            else
+            {
+                nrBlackPiece--;
+                if(middleSquare.isKing())
+                    nrBlackKing--;
+            }
             middleSquare.setIdPlayer(0);
             middleSquare.setKing(false);
         }
@@ -162,11 +212,24 @@ public class Board{
 
     private void checkKing(Square from, Square movedSquare) {
         if (from.isKing()) {
+            if(movedSquare.getIdPlayer() == 1)
+                nrWhiteKing++;
+            else
+                nrBlackKing++;
             movedSquare.setKing(true);
+
+            if(from.getIdPlayer() == 1)
+                nrWhiteKing--;
+            else
+                nrBlackKing--;
             from.setKing(false);
         } else if (movedSquare.getRow() == 7 && from.getIdPlayer() == 2
                 || movedSquare.getRow() == 0 && from.getIdPlayer() == 1) {
             movedSquare.setKing(true);
+            if(movedSquare.getIdPlayer() == 1)
+                nrWhiteKing++;
+            else
+                nrBlackKing++;
         }
     }
 

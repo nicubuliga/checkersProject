@@ -56,13 +56,13 @@ public class AIThread extends Thread{
                         turn = false;
                     } else {
 //                        Miscarea botului
-                        gameBoard.printBoard();
-                        move = aiPlayer.getNextMove(2, gameBoard);
-                        System.out.println();
-                        gameBoard.printBoard();
+                        move = aiPlayer.getNextMove(9, gameBoard);
                         gameBoard.makeMove(move, 2);
-                        System.out.println();
                         gameBoard.printBoard();
+                        System.out.println("nr white piece: " + gameBoard.getNrWhitePiece());
+                        System.out.println("nr black piece: " + gameBoard.getNrBlackPiece());
+                        System.out.println("nr white king: " + gameBoard.getNrWhiteKing());
+                        System.out.println("nr black king: " + gameBoard.getNrBlackKing());
                         if(gameBoard.checkWinner() != 0) {
                             out.println("GameOver");
                             out.println();

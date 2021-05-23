@@ -30,19 +30,21 @@ public class AIPlayer {
     }
 
     public String getNextMove(int depth, Board currBoard) throws CloneNotSupportedException {
+        double alpha = Double.NEGATIVE_INFINITY;
+        double beta = Double.POSITIVE_INFINITY;
         List<String> moves = new ArrayList<>();
 
         moves = getAllPlayerMoves(currBoard, 2);
 
-        double minValue = Double.MAX_VALUE;
+        double minValue = Double.POSITIVE_INFINITY;
         String bestMove = "";
 
         for(String move : moves) {
             Board tempBoard = new Board(currBoard);
             tempBoard.makeMove(move, 2);
-            double value = minimax(tempBoard, depth - 1, 1);
-
-            if(value < minValue) {
+            double value = minimax(tempBoard, depth - 1, 1,alpha,beta);
+            System.out.println(move + " " + value);
+            if(value <= minValue) {
                 minValue = value;
                 bestMove = move;
             }
@@ -51,9 +53,10 @@ public class AIPlayer {
         return bestMove;
     }
 
-    public double minimax(Board board, int depth, int idPlayer) throws CloneNotSupportedException {
+    public double minimax(Board board, int depth, int idPlayer,double alpha,double beta) throws CloneNotSupportedException {
         if(depth == 0)
-            return getHeuristic(board, 3 - idPlayer);
+//            return getHeuristic(board,3-idPlayer);
+            return getHeuristic(board);
 
         List<String> moves = getAllPlayerMoves(board, idPlayer);
 
@@ -61,26 +64,34 @@ public class AIPlayer {
         Board tempBoard = null;
 
         if(idPlayer == 1) {
-            value = Double.MIN_VALUE;
+            value = Double.NEGATIVE_INFINITY;
 
             for(String move : moves) {
                 tempBoard = new Board(board);
                 tempBoard.makeMove(move, idPlayer);
 
-                double result = minimax(tempBoard, depth - 1, 3 - idPlayer);
+                double result = minimax(tempBoard, depth - 1, 3 - idPlayer,alpha,beta);
 
-                value = Math.max(result, value);
+                value = Math.max(value,result);
+
+                alpha = Math.max(alpha, result);
+
+                if(alpha >= beta)
+                    break;
             }
             return value;
         } else {
-            value = Double.MAX_VALUE;
+            value = Double.POSITIVE_INFINITY;
             for(String move : moves) {
                 tempBoard = new Board(board);
                 tempBoard.makeMove(move, idPlayer);
 
-                double result = minimax(tempBoard, depth - 1, 3 - idPlayer);
+                double result = minimax(tempBoard, depth - 1, 3 - idPlayer,alpha,beta);
 
                 value = Math.min(result, value);
+                beta = Math.min(beta,result);
+                if(beta <= alpha)
+                    break;
             }
             return value;
         }
@@ -97,14 +108,17 @@ public class AIPlayer {
         double kingWeight = 1.2;
         double result = 0;
         if(idPlayer == 1)
-            result = b.getNumKingPieces(idPlayer) * kingWeight + b.getNumNormalPieces(idPlayer) - b.getNumKingPieces(2) *
-                    kingWeight -
-                    b.getNumNormalPieces(2);
+            result = b.getNumKingPieces(idPlayer) * kingWeight + b.getNumNormalPieces(idPlayer) -
+                    b.getNumKingPieces(2) * kingWeight -  b.getNumNormalPieces(2);
         else
-            result = b.getNumKingPieces(idPlayer) * kingWeight + b.getNumNormalPieces(idPlayer) - b.getNumKingPieces(1) *
-                    kingWeight -
-                    b.getNumNormalPieces(1);
+            result = b.getNumKingPieces(idPlayer) * kingWeight + b.getNumNormalPieces(idPlayer) -
+                    b.getNumKingPieces(1) * kingWeight - b.getNumNormalPieces(1);
         return result;
 
+    }
+    private double getHeuristic(Board board)
+    {
+        return (board.getNrWhitePiece() - board.getNrBlackPiece() +
+                (board.getNrWhiteKing() * 0.5) - (board.getNrBlackKing() * 0.5));
     }
 }

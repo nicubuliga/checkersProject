@@ -60,7 +60,7 @@ public class SquarePanel extends JPanel {
                 if(squareModel.isKing())
                     paintPiece("blackKing.png",g);
                 else
-                paintPiece("pieceBlack.png",g);
+                paintPiece("blackPiece.png",g);
 
         } catch (IOException e) {
             e.printStackTrace();
