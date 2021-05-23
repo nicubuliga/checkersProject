@@ -3,12 +3,21 @@ package server.models;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Board {
+public class Board implements Cloneable{
     private Square[][] squares;
 
     public Board() {
         squares = new Square[8][8];
         initBoard();
+    }
+
+    public Square[][] getSquares() {
+        return squares;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     private void initBoard() {
@@ -22,7 +31,7 @@ public class Board {
             }
     }
 
-    public void makeMove(String move,int idPlayer) {
+    public void makeMove(String move, int idPlayer) {
         String[] moves = move.split(" ");
         int from = Integer.parseInt(moves[0]);
         int fromRow = from / 10;
@@ -30,8 +39,7 @@ public class Board {
         int to = Integer.parseInt(moves[1]);
         int toRow = to / 10;
         int toCol = to % 10;
-        if(idPlayer == 1)
-        {
+        if (idPlayer == 1) {
             fromRow = 7 - fromRow;
             fromCol = 7 - fromCol;
             toRow = 7 - toRow;
@@ -68,15 +76,13 @@ public class Board {
             for (int j = 0; j < 8; ++j)
                 if (squares[i][j].getIdPlayer() == 1) {
                     nrWhiteMoves += nrPlayableSquares(squares[i][j]);
-                } else
-                    if(squares[i][j].getIdPlayer() == 2)
-                {
+                } else if (squares[i][j].getIdPlayer() == 2) {
                     nrBlackMoves += nrPlayableSquares(squares[i][j]);
                 }
-        System.out.println("nr black: "+nrBlackMoves);
-        System.out.println("nr white: "+nrWhiteMoves);
-        if(nrBlackMoves == 0) return 1;
-        if(nrWhiteMoves == 0) return 2;
+        System.out.println("nr black: " + nrBlackMoves);
+        System.out.println("nr white: " + nrWhiteMoves);
+        if (nrBlackMoves == 0) return 1;
+        if (nrWhiteMoves == 0) return 2;
 
         return 0;
     }
@@ -112,6 +118,39 @@ public class Board {
                 crossJumpFront(playableSquares, movableRow - 1, selectedCol, movableRow, square.getIdPlayer());
         }
         return playableSquares.size();
+    }
+
+    public List<Square> playableSquares(Square square) {
+        List<Square> playableSquares = new LinkedList<Square>();
+
+        int selectedRow = square.getRow();
+        int selectedCol = square.getColumn();
+
+        int movableRow = selectedRow;
+
+        if (square.getIdPlayer() == 1) movableRow--;
+        else movableRow++;
+
+        //check two front squares
+        twoFrontSquares(playableSquares, movableRow, selectedCol);
+
+        if (square.getIdPlayer() == 1)
+            crossJumpFront(playableSquares, movableRow - 1, selectedCol, movableRow, square.getIdPlayer());
+        else
+            crossJumpFront(playableSquares, movableRow + 1, selectedCol, movableRow, square.getIdPlayer());
+
+        if (square.isKing()) {
+            if (square.getIdPlayer() == 1)
+                movableRow = selectedRow + 1;
+            else
+                movableRow = selectedRow - 1;
+            twoFrontSquares(playableSquares, movableRow, selectedCol);
+            if (square.getIdPlayer() == 1)
+                crossJumpFront(playableSquares, movableRow + 1, selectedCol, movableRow, square.getIdPlayer());
+            else
+                crossJumpFront(playableSquares, movableRow - 1, selectedCol, movableRow, square.getIdPlayer());
+        }
+        return playableSquares;
     }
 
     private void checkKing(Square from, Square movedSquare) {
@@ -175,5 +214,27 @@ public class Board {
         if (squares[row][col].getIdPlayer() != idPlayer && squares[row][col].getIdPlayer() != 0)
             return true;
         return false;
+    }
+
+    public int getNumKingPieces(int idPlayer) {
+        int nrKing = 0;
+
+        for (int i = 0; i < 8; ++i)
+            for (int j = 0; j < 8; ++j)
+                if (squares[i][j].isKing() && squares[i][j].getIdPlayer() == idPlayer)
+                    ++nrKing;
+
+        return nrKing;
+    }
+
+    public int getNumNormalPieces(int idPlayer) {
+        int nrPieces = 0;
+
+        for (int i = 0; i < 8; ++i)
+            for (int j = 0; j < 8; ++j)
+                if (!squares[i][j].isKing() && squares[i][j].getIdPlayer() == idPlayer)
+                    ++nrPieces;
+
+        return nrPieces;
     }
 }
