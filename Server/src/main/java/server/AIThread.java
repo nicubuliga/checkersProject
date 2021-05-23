@@ -56,10 +56,13 @@ public class AIThread extends Thread{
                         turn = false;
                     } else {
 //                        Miscarea botului
-
-                        move = aiPlayer.getNextMove(5, gameBoard);
+                        gameBoard.printBoard();
+                        move = aiPlayer.getNextMove(2, gameBoard);
+                        System.out.println();
+                        gameBoard.printBoard();
                         gameBoard.makeMove(move, 2);
-
+                        System.out.println();
+                        gameBoard.printBoard();
                         if(gameBoard.checkWinner() != 0) {
                             out.println("GameOver");
                             out.println();

@@ -30,7 +30,7 @@ public class Server {
                     String type = readOpponentType(socket);
 
                     if(type.equals("AI")) {
-                        System.out.println("Joaca cu botul");
+                        new AIThread(socket).start();
                     } else if(type != null){
 
                         if (dataUtil.socketQueue != null) {

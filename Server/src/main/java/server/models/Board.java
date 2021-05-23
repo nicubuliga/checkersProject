@@ -3,7 +3,7 @@ package server.models;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Board implements Cloneable{
+public class Board{
     private Square[][] squares;
 
     public Board() {
@@ -11,13 +11,20 @@ public class Board implements Cloneable{
         initBoard();
     }
 
-    public Square[][] getSquares() {
-        return squares;
+    public Board(Board board)
+    {
+        squares = new Square[8][8];
+        for(int i=0; i < 8; ++i)
+            for(int j=0; j < 8; ++j)
+            {
+                this.squares[i][j] = new Square(i,j);
+                this.squares[i][j].setKing(board.getSquares()[i][j].isKing());
+                this.squares[i][j].setIdPlayer(board.getSquares()[i][j].getIdPlayer());
+            }
     }
 
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
+    public Square[][] getSquares() {
+        return squares;
     }
 
     private void initBoard() {
@@ -236,5 +243,13 @@ public class Board implements Cloneable{
                     ++nrPieces;
 
         return nrPieces;
+    }
+    public void printBoard()
+    {
+        for(int i=0; i < 8; ++i) {
+            for (int j = 0; j < 8; ++j)
+                System.out.print(squares[i][j].getIdPlayer() + " ");
+            System.out.println();
+        }
     }
 }

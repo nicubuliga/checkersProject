@@ -34,24 +34,24 @@ public class AIPlayer {
 
         moves = getAllPlayerMoves(currBoard, 2);
 
-        double maxValue = Double.MIN_VALUE;
+        double minValue = Double.MAX_VALUE;
         String bestMove = "";
 
         for(String move : moves) {
-            Board tempBoard = (Board) currBoard.clone();
+            Board tempBoard = new Board(currBoard);
             tempBoard.makeMove(move, 2);
             double value = minimax(tempBoard, depth - 1, 1);
 
-            if(value > maxValue) {
-                value = maxValue;
+            if(value < minValue) {
+                minValue = value;
                 bestMove = move;
             }
         }
 
-        return  bestMove;
+        return bestMove;
     }
 
-    public double minimax(Board board, int depth, int idPlayer) {
+    public double minimax(Board board, int depth, int idPlayer) throws CloneNotSupportedException {
         if(depth == 0)
             return getHeuristic(board, 3 - idPlayer);
 
@@ -64,28 +64,26 @@ public class AIPlayer {
             value = Double.MIN_VALUE;
 
             for(String move : moves) {
-                tempBoard = board;
+                tempBoard = new Board(board);
                 tempBoard.makeMove(move, idPlayer);
 
                 double result = minimax(tempBoard, depth - 1, 3 - idPlayer);
 
                 value = Math.max(result, value);
             }
-
+            return value;
         } else {
             value = Double.MAX_VALUE;
-
             for(String move : moves) {
-                tempBoard = board;
+                tempBoard = new Board(board);
                 tempBoard.makeMove(move, idPlayer);
 
                 double result = minimax(tempBoard, depth - 1, 3 - idPlayer);
 
                 value = Math.min(result, value);
             }
+            return value;
         }
-
-        return value;
     }
 
 
@@ -99,13 +97,13 @@ public class AIPlayer {
         double kingWeight = 1.2;
         double result = 0;
         if(idPlayer == 1)
-            result = b.getNumKingPieces(idPlayer) * kingWeight + b.getNumNormalPieces(idPlayer) - b.getNumKingPieces(idPlayer) *
+            result = b.getNumKingPieces(idPlayer) * kingWeight + b.getNumNormalPieces(idPlayer) - b.getNumKingPieces(2) *
                     kingWeight -
-                    b.getNumNormalPieces(idPlayer);
+                    b.getNumNormalPieces(2);
         else
-            result = b.getNumKingPieces(idPlayer) * kingWeight + b.getNumNormalPieces(idPlayer) - b.getNumKingPieces(idPlayer) *
+            result = b.getNumKingPieces(idPlayer) * kingWeight + b.getNumNormalPieces(idPlayer) - b.getNumKingPieces(1) *
                     kingWeight -
-                    b.getNumNormalPieces(idPlayer);
+                    b.getNumNormalPieces(1);
         return result;
 
     }
