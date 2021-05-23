@@ -6,7 +6,7 @@ public class Square {
     private int row;
     private boolean isKing = false;
 
-    public Square(int col, int row) {
+    public Square(int row, int col) {
         this.column = col;
         this.row = row;
     }
