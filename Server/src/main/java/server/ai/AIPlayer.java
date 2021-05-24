@@ -119,6 +119,6 @@ public class AIPlayer {
     private double getHeuristic(Board board)
     {
         return (board.getNrWhitePiece() - board.getNrBlackPiece() +
-                (board.getNrWhiteKing() * 0.5) - (board.getNrBlackKing() * 0.5));
+                (board.getNrWhiteKing() * 2) - (board.getNrBlackKing() * 2));
     }
 }

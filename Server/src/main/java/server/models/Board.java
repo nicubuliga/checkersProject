@@ -89,11 +89,6 @@ public class Board{
 
         checkKing(fromSquare, toSquare);
 
-        if(toSquare.getIdPlayer() == 1)
-            nrWhitePiece--;
-        else
-            if(toSquare.getIdPlayer() == 2)
-                nrBlackPiece--;
         toSquare.setIdPlayer(fromSquare.getIdPlayer());
 
         fromSquare.setIdPlayer(0);
@@ -111,15 +106,20 @@ public class Board{
 
             if(middleSquare.getIdPlayer() == 1)
             {
-                nrWhitePiece--;
+
                 if(middleSquare.isKing())
+                {
                     nrWhiteKing--;
+                } else
+                    nrWhitePiece--;
             }
             else
             {
-                nrBlackPiece--;
+
                 if(middleSquare.isKing())
                     nrBlackKing--;
+                else
+                    nrBlackPiece--;
             }
             middleSquare.setIdPlayer(0);
             middleSquare.setKing(false);
@@ -212,24 +212,23 @@ public class Board{
 
     private void checkKing(Square from, Square movedSquare) {
         if (from.isKing()) {
-            if(movedSquare.getIdPlayer() == 1)
-                nrWhiteKing++;
-            else
-                nrBlackKing++;
+
             movedSquare.setKing(true);
 
-            if(from.getIdPlayer() == 1)
-                nrWhiteKing--;
-            else
-                nrBlackKing--;
             from.setKing(false);
         } else if (movedSquare.getRow() == 7 && from.getIdPlayer() == 2
                 || movedSquare.getRow() == 0 && from.getIdPlayer() == 1) {
             movedSquare.setKing(true);
-            if(movedSquare.getIdPlayer() == 1)
+            if(from.getIdPlayer() == 1)
+            {
                 nrWhiteKing++;
+                nrWhitePiece--;
+            }
             else
+            {
                 nrBlackKing++;
+                nrBlackPiece--;
+            }
         }
     }
 

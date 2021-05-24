@@ -56,7 +56,7 @@ public class AIThread extends Thread{
                         turn = false;
                     } else {
 //                        Miscarea botului
-                        move = aiPlayer.getNextMove(9, gameBoard);
+                        move = aiPlayer.getNextMove(3, gameBoard);
                         gameBoard.makeMove(move, 2);
                         gameBoard.printBoard();
                         System.out.println("nr white piece: " + gameBoard.getNrWhitePiece());
