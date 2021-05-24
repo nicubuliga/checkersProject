@@ -64,7 +64,7 @@ class ClientThread extends Thread {
                                 out2.println("GameOver winner");
                             }
                             out.flush();
-                            out2.println();
+                            out2.flush();
 
                             running = false;
                         }
@@ -86,7 +86,7 @@ class ClientThread extends Thread {
                                 out2.println("GameOver winner");
                             }
                             out.flush();
-                            out2.println();
+                            out2.flush();
 
                             running = false;
                         }

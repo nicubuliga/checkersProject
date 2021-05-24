@@ -3,6 +3,7 @@ import controllers.MyMouseListener;
 import views.BoardPanel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
@@ -19,13 +20,61 @@ public class ClientApp extends JFrame {
 
     private PrintWriter out;
     private BufferedReader in;
-    private String opponent;
-
+//    private String opponent;
+    private JLabel opponent;
+    private JRadioButton male;
+    private JRadioButton female;
+    private ButtonGroup gengp;
+    private JButton sub;
+    private GridLayout gridLayout = new GridLayout(4,1);
     public ClientApp ()
     {
         try {
-            opponent = (String) JOptionPane.showInputDialog(null, "AI or Real Player", "Type",
-                    JOptionPane.OK_CANCEL_OPTION);
+//            opponent = (String) JOptionPane.showInputDialog(null, "AI or Real Player", "Type",
+//                    JOptionPane.OK_CANCEL_OPTION);
+            setPreferredSize(new Dimension(300,200));
+            setTitle("Checkers");
+//            setBounds(300, 90, 900, 600);
+            setDefaultCloseOperation(EXIT_ON_CLOSE);
+            setResizable(false);
+
+//            c = getContentPane();
+            getContentPane().setLayout(gridLayout);
+            getContentPane().setHorizontalAlignment(JLabel.CENTER);
+
+
+            opponent = new JLabel("Select your opponent: ");
+
+            opponent.setFont(new Font("Arial", Font.PLAIN, 15));
+//            opponent.setSize(300, 20);
+//            opponent.setLocation(100, 200);
+            getContentPane().add(opponent);
+
+            male = new JRadioButton("Male");
+            male.setFont(new Font("Arial", Font.PLAIN, 15));
+            male.setSelected(true);
+//            male.setSize(75, 20);
+//            male.setLocation(100, 150);
+            getContentPane().add(male);
+
+            female = new JRadioButton("Female");
+            female.setFont(new Font("Arial", Font.PLAIN, 15));
+            female.setSelected(false);
+//            female.setSize(80, 20);
+//            female.setLocation(175, 150);
+            getContentPane().add(female);
+
+            gengp = new ButtonGroup();
+            gengp.add(male);
+            gengp.add(female);
+
+            sub = new JButton("Submit");
+            sub.setFont(new Font("Arial", Font.PLAIN, 15));
+            sub.setSize(100, 20);
+//            sub.setLocation(150, );
+//            sub.addActionListener(this);
+            getContentPane().add(sub);
+
 
             connect();
         } catch (UnknownHostException e) {
