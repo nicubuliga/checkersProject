@@ -103,6 +103,8 @@ public class ClientApp extends JFrame {
         Controller controller = new Controller(in, out);
 
         setup(controller);
+
+//        Noul thread responsabil pentru desfasurarea jocului
         new Thread(controller).start();
     }
 

@@ -23,35 +23,47 @@ public class Server {
             while (dataUtil.running) {
                 Socket socket = null;
                 try {
-                    if (dataUtil.socketQueue != null)
-                        System.out.println(dataUtil.socketQueue.isClosed());
+//                    if (dataUtil.socketQueue != null)
+//                        System.out.println(dataUtil.socketQueue.isClosed());
                     socket = serverSocket.accept();
 
                     System.out.println("Conectat!");
 
+//                    Tipul oponentului: AI / Real Player
                     String type = readOpponentType(socket);
 
                     if(type.equals("AI")) {
+//                        Pornesc un thread pentru un singur client
                         new AIThread(socket).start();
                     } else if(type != null){
 
+//                        Daca exista un client in asteptare de oponent
                         if (dataUtil.socketQueue != null) {
                             try {
-                                PrintWriter printtest = new PrintWriter(dataUtil.socketQueue.getOutputStream(), true);
-                                printtest.println("test");
+
+//                                Testez daca oponentul inca este conectat
+                                PrintWriter printTest = new PrintWriter(dataUtil.socketQueue.getOutputStream(), true);
+                                printTest.println("test");
                                 BufferedReader in = new BufferedReader(
                                         new InputStreamReader(dataUtil.socketQueue.getInputStream()));
                                 int testMess = in.read();
+
+//                                Daca oponentul e conectat atunci creez un nou thread pentru 2 clienti
                                 if (testMess != -1) {
                                     new ClientThread(data.socketQueue, socket, dataUtil).start();
                                 }
+
+//                                Golesc coada de clienti
                                 dataUtil.socketQueue = null;
                             } catch (SocketException e) {
+
+//                                Daca ultimul client s-a deconectat, il pun pe clientul curent in coada
                                 dataUtil.socketQueue = socket;
                             }
-                        } else {
+                        } else
+//                            Daca nu exista niciun oponent in coada, il pun pe clientul curent in coada
+                            {
                             dataUtil.socketQueue = socket;
-
                         }
                     }
                 } catch (SocketTimeoutException e) {

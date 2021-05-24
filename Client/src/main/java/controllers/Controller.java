@@ -224,8 +224,7 @@ public class Controller implements Runnable {
                     this.idPlayer = Integer.parseInt(args[1]);
                     boardPanel.getBoardModel().setIdPlayer(idPlayer);
                     boardPanel.overwriteSquares();
-//                    boardPanel.repaint();
-//                    boardPanel.repaintPanels();
+
                 } else if (response.equals("GameOver")) {
                     System.out.println(response);
                     running = false;

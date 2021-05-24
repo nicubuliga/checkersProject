@@ -1,5 +1,8 @@
 package server.models;
 
+/*
+    Clasa Square mentine datele unui patrat din Board
+ */
 public class Square {
     private int idPlayer;
     private int column;

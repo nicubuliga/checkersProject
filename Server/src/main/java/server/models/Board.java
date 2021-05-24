@@ -3,6 +3,9 @@ package server.models;
 import java.util.LinkedList;
 import java.util.List;
 
+/*
+  Clasa Board va mentine datele unui joc in desfasurare
+ */
 public class Board{
     private Square[][] squares;
     private int nrWhitePiece = 0;

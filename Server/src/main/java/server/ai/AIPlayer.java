@@ -6,6 +6,10 @@ import server.models.Square;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+    In clasa AIPlayer se afla logica AI-ului, bazata pe algoritmul Minimax
+ */
+
 public class AIPlayer {
 
     public List<String> getAllPlayerMoves(Board currBoard, int idPlayer) {
@@ -97,28 +101,9 @@ public class AIPlayer {
         }
     }
 
-
-    private double getHeuristic(Board b, int idPlayer)
-    {
-        //naive implementation
-//        if(getSide() == Side.WHITE)
-//            return b.getNumWhitePieces() - b.getNumBlackPieces();
-//        return b.getNumBlackPieces() - b.getNumWhitePieces();
-
-        double kingWeight = 1.2;
-        double result = 0;
-        if(idPlayer == 1)
-            result = b.getNumKingPieces(idPlayer) * kingWeight + b.getNumNormalPieces(idPlayer) -
-                    b.getNumKingPieces(2) * kingWeight -  b.getNumNormalPieces(2);
-        else
-            result = b.getNumKingPieces(idPlayer) * kingWeight + b.getNumNormalPieces(idPlayer) -
-                    b.getNumKingPieces(1) * kingWeight - b.getNumNormalPieces(1);
-        return result;
-
-    }
     private double getHeuristic(Board board)
     {
         return (board.getNrWhitePiece() - board.getNrBlackPiece() +
-                (board.getNrWhiteKing() * 2) - (board.getNrBlackKing() * 2));
+                (board.getNrWhiteKing() * 1.5) - (board.getNrBlackKing() * 1.5));
     }
 }
