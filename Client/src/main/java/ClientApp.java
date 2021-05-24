@@ -58,6 +58,7 @@ public class ClientApp extends JFrame {
 
         boardPanel = new BoardPanel(listener , controller.idPlayer);
         controller.setBoardPanel(boardPanel);
+        controller.setFrame(this);
         add(boardPanel);
     }
 

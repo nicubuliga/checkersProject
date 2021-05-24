@@ -3,6 +3,8 @@ package controllers;
 import models.SquareModel;
 import views.BoardPanel;
 
+import javax.swing.*;
+import java.awt.event.WindowEvent;
 import java.io.*;
 import java.net.SocketException;
 import java.util.ArrayList;
@@ -19,7 +21,11 @@ public class Controller implements Runnable {
     private List<SquareModel> selectedSquares = new ArrayList<>();
     private boolean running = true;
     private boolean waitingForAction;
+    private JFrame frame;
 
+    public void setFrame(JFrame frame) {
+        this.frame = frame;
+    }
 
     public PrintWriter getOut() {
         return out;
@@ -177,6 +183,12 @@ public class Controller implements Runnable {
         deselectSquare();
     }
 
+    private void displayMessage(String message) {
+        JOptionPane.showMessageDialog(frame,"You are " + message);
+
+        frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+    }
+
     @Override
     public void run() {
         while (running) {
@@ -202,6 +214,9 @@ public class Controller implements Runnable {
 //                    boardPanel.repaintPanels();
                 } else if (response.equals("GameOver")) {
                     System.out.println(response);
+                    running = false;
+
+                    displayMessage(args[1]);
                 }
             } catch (SocketException e) {
                 running = false;

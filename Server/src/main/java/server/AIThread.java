@@ -48,8 +48,13 @@ public class AIThread extends Thread{
                         gameBoard.makeMove(move,1);
 
                         if(gameBoard.checkWinner() != 0) {
-                            out.println("GameOver");
+                            if(gameBoard.checkWinner() == 1) {
+                                out.println("GameOver winner");
+                            } else {
+                                out.println("GameOver loser");
+                            }
                             out.flush();
+                            running = false;
                         }
 
                         System.out.println(move);
@@ -66,6 +71,7 @@ public class AIThread extends Thread{
                         if(gameBoard.checkWinner() != 0) {
                             out.println("GameOver");
                             out.println();
+                            running = false;
                         }
 
                         System.out.println(move);

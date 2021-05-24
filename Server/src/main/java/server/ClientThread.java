@@ -55,10 +55,18 @@ class ClientThread extends Thread {
                         gameBoard.makeMove(move,1);
 
                         if(gameBoard.checkWinner() != 0) {
-                            out.println("GameOver");
+
+                            if(gameBoard.checkWinner() == 1) {
+                                out.println("GameOver winner");
+                                out2.println("GameOver loser");
+                            } else {
+                                out.println("GameOver loser");
+                                out2.println("GameOver winner");
+                            }
                             out.flush();
-                            out2.println("GameOver");
                             out2.println();
+
+                            running = false;
                         }
 
                         System.out.println(move);
@@ -70,10 +78,17 @@ class ClientThread extends Thread {
                         gameBoard.makeMove(move,2);
 
                         if(gameBoard.checkWinner() != 0) {
-                            out2.println("GameOver");
-                            out2.flush();
-                            out.println("GameOver");
-                            out.println();
+                            if(gameBoard.checkWinner() == 1) {
+                                out.println("GameOver winner");
+                                out2.println("GameOver loser");
+                            }else {
+                                out.println("GameOver loser");
+                                out2.println("GameOver winner");
+                            }
+                            out.flush();
+                            out2.println();
+
+                            running = false;
                         }
 
                         System.out.println(move);
