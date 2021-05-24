@@ -26,6 +26,16 @@ public class BoardPanel extends JPanel {
         initTable();
     }
 
+    @Override
+    public Dimension getPreferredSize() {
+        return dimension;
+    }
+
+    @Override
+    public Dimension getMinimumSize() {
+        return dimension;
+    }
+
     public BoardModel getBoardModel() {
         return boardModel;
     }

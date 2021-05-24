@@ -69,8 +69,12 @@ public class AIThread extends Thread{
                         System.out.println("nr white king: " + gameBoard.getNrWhiteKing());
                         System.out.println("nr black king: " + gameBoard.getNrBlackKing());
                         if(gameBoard.checkWinner() != 0) {
-                            out.println("GameOver");
-                            out.println();
+                            if(gameBoard.checkWinner() == 1) {
+                                out.println("GameOver winner");
+                            } else {
+                                out.println("GameOver loser");
+                            }
+                            out.flush();
                             running = false;
                         }
 

@@ -27,6 +27,8 @@ public class Server {
                         System.out.println(dataUtil.socketQueue.isClosed());
                     socket = serverSocket.accept();
 
+                    System.out.println("Conectat!");
+
                     String type = readOpponentType(socket);
 
                     if(type.equals("AI")) {

@@ -60,7 +60,6 @@ public class BoardModel {
             if (selectedCol >= 0 && selectedCol < 7) {
                 SquareModel rightCorner = squares[movableRow][selectedCol + 1];
                 if (rightCorner.getIdPLayer() == 0) {
-                    rightCorner.setMutable(true);
                     pack.add(rightCorner);
                 }
             }
@@ -69,7 +68,6 @@ public class BoardModel {
             if (selectedCol > 0 && selectedCol <= 8) {
                 SquareModel leftCorner = squares[movableRow][selectedCol - 1];
                 if (leftCorner.getIdPLayer() == 0) {
-                    leftCorner.setMutable(true);
                     pack.add(leftCorner);
                 }
             }
@@ -86,7 +84,6 @@ public class BoardModel {
                 SquareModel rightCorner = squares[movableRow][selectedCol + 2];
                 middleCol = selectedCol + 1;
                 if (rightCorner.getIdPLayer() == 0 && isOpponentInbetween(middleRow, middleCol)) {
-                    rightCorner.setMutable(true);
                     pack.add(rightCorner);
                 }
             }
@@ -96,7 +93,6 @@ public class BoardModel {
                 SquareModel leftCorner = squares[movableRow][selectedCol - 2];
                 middleCol = selectedCol - 1;
                 if (leftCorner.getIdPLayer() == 0 && isOpponentInbetween(middleRow, middleCol)) {
-                    leftCorner.setMutable(true);
                     pack.add(leftCorner);
                 }
             }

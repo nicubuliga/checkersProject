@@ -4,6 +4,8 @@ import views.BoardPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
@@ -20,68 +22,72 @@ public class ClientApp extends JFrame {
 
     private PrintWriter out;
     private BufferedReader in;
-//    private String opponent;
+    private String opponentMsg;
     private JLabel opponent;
-    private JRadioButton male;
-    private JRadioButton female;
-    private ButtonGroup gengp;
-    private JButton sub;
+    private JPanel inputPanel;
+    private JRadioButton bot;
+    private JRadioButton realPlayer;
+    private ButtonGroup oppType;
+    private JButton submitBtn;
     private GridLayout gridLayout = new GridLayout(4,1);
+
+    private void readOpponentType() {
+        inputPanel = new JPanel();
+        inputPanel.setPreferredSize(new Dimension(250,250));
+
+        inputPanel.setLayout(gridLayout);
+
+        opponent = new JLabel("Select your opponent: ");
+
+        opponent.setFont(new Font("Arial", Font.PLAIN, 15));
+
+        inputPanel.add(opponent);
+
+        realPlayer = new JRadioButton("Real Player");
+        realPlayer.setFont(new Font("Arial", Font.PLAIN, 15));
+        realPlayer.setSelected(true);
+
+        inputPanel.add(realPlayer);
+//
+        bot = new JRadioButton("AI Player");
+        bot.setFont(new Font("Arial", Font.PLAIN, 15));
+        bot.setSelected(false);
+
+        inputPanel.add(bot);
+
+        oppType = new ButtonGroup();
+        oppType.add(realPlayer);
+        oppType.add(bot);
+//
+        submitBtn = new JButton("Play");
+        submitBtn.setFont(new Font("Arial", Font.PLAIN, 15));
+        submitBtn.setSize(100, 20);
+
+        inputPanel.add(submitBtn);
+        add(inputPanel, BorderLayout.CENTER);
+
+        submitBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if(realPlayer.isSelected()) {
+                        opponentMsg = "Real Player";
+                    } else {
+                        opponentMsg = "AI";
+                    }
+                    connect();
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
+            }
+        });
+    }
+
     public ClientApp ()
     {
-        try {
-//            opponent = (String) JOptionPane.showInputDialog(null, "AI or Real Player", "Type",
-//                    JOptionPane.OK_CANCEL_OPTION);
-            setPreferredSize(new Dimension(300,200));
-            setTitle("Checkers");
-//            setBounds(300, 90, 900, 600);
-            setDefaultCloseOperation(EXIT_ON_CLOSE);
-            setResizable(false);
 
-//            c = getContentPane();
-            getContentPane().setLayout(gridLayout);
-            getContentPane().setHorizontalAlignment(JLabel.CENTER);
-
-
-            opponent = new JLabel("Select your opponent: ");
-
-            opponent.setFont(new Font("Arial", Font.PLAIN, 15));
-//            opponent.setSize(300, 20);
-//            opponent.setLocation(100, 200);
-            getContentPane().add(opponent);
-
-            male = new JRadioButton("Male");
-            male.setFont(new Font("Arial", Font.PLAIN, 15));
-            male.setSelected(true);
-//            male.setSize(75, 20);
-//            male.setLocation(100, 150);
-            getContentPane().add(male);
-
-            female = new JRadioButton("Female");
-            female.setFont(new Font("Arial", Font.PLAIN, 15));
-            female.setSelected(false);
-//            female.setSize(80, 20);
-//            female.setLocation(175, 150);
-            getContentPane().add(female);
-
-            gengp = new ButtonGroup();
-            gengp.add(male);
-            gengp.add(female);
-
-            sub = new JButton("Submit");
-            sub.setFont(new Font("Arial", Font.PLAIN, 15));
-            sub.setSize(100, 20);
-//            sub.setLocation(150, );
-//            sub.addActionListener(this);
-            getContentPane().add(sub);
-
-
-            connect();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        readOpponentType();
+//            connect();
     }
 
     public void connect() throws IOException {
@@ -91,7 +97,7 @@ public class ClientApp extends JFrame {
                 new InputStreamReader(socket.getInputStream()));
 
         String type = in.readLine();
-        out.println(opponent);
+        out.println(opponentMsg);
         out.flush();
 
         Controller controller = new Controller(in, out);
@@ -108,7 +114,13 @@ public class ClientApp extends JFrame {
         boardPanel = new BoardPanel(listener , controller.idPlayer);
         controller.setBoardPanel(boardPanel);
         controller.setFrame(this);
+
+        inputPanel.setVisible(false);
+        setLayout(new BorderLayout());
         add(boardPanel);
+        setSize(new Dimension(720, 720));
+        revalidate();
+        repaint();
     }
 
 }

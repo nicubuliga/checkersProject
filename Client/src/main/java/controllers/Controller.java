@@ -9,7 +9,6 @@ import java.io.*;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Controller implements Runnable {
 
@@ -67,11 +66,15 @@ public class Controller implements Runnable {
     }
 
     public void selectSquare(SquareModel squareModel) {
-        if (selectedSquares.isEmpty() && squareModel.getIdPLayer() != 0)
+        if (selectedSquares.isEmpty() && squareModel.getIdPLayer() != 0) {
             addToSelected(squareModel);
+        }
         else {
             System.out.println(playableSquares);
             if (playableSquares.contains(squareModel)) {
+                for(SquareModel square : playableSquares) {
+                    square.setMutable(false);
+                }
                 //move
                 move(selectedSquares.get(0), squareModel);
             } else {
@@ -79,6 +82,8 @@ public class Controller implements Runnable {
                 addToSelected(squareModel);
             }
         }
+
+
 
     }
 
@@ -101,6 +106,15 @@ public class Controller implements Runnable {
         squareModel.setSelected(true);
         selectedSquares.add(squareModel);
         getPlayableSquares(squareModel);
+
+        if(squareModel.getIdPLayer() != 0) {
+            for (SquareModel square : playableSquares) {
+                square.setMutable(true);
+
+            }
+        }
+
+        boardPanel.repaint();
     }
 
     private void getPlayableSquares(SquareModel squareModel) {

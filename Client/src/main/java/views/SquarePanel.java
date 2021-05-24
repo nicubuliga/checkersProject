@@ -26,48 +26,46 @@ public class SquarePanel extends JPanel {
         this.squareModel = squareModel;
     }
 
-//    public void setListner(MyMouseListener MyListner){
-////        setListener();
-//        if(squareModel.isMutable() || squareModel.getIdPLayer()==1){
-//            this.removeMouseListener(MyListner);
-//            this.addMouseListener(MyListner);
-//        }else{
-//            this.removeMouseListener(MyListner);
-//        }
-//    }
-
     @Override
     public void paint(Graphics g) {
         if (squareModel.getColumn() % 2 != squareModel.getRow() % 2) {
-            g.setColor(new Color(181,136,99));
+            g.setColor(new Color(181, 136, 99));
+            g.fillRect(0, 0, getWidth(), getHeight());
+        } else {
+            g.setColor(new Color(240, 217, 181));
             g.fillRect(0, 0, getWidth(), getHeight());
         }
-        else
-        {
-            g.setColor(new Color(240,217,181));
+
+        if(squareModel.getIdPLayer() != 0 && squareModel.isSelected()) {
+            g.setColor(new Color(212, 137, 137));
             g.fillRect(0, 0, getWidth(), getHeight());
         }
 
         try {
-            if (squareModel.getIdPLayer() == 1)
-            {
-                if(squareModel.isKing())
-                    paintPiece("whiteKing.png",g);
+            if (squareModel.getIdPLayer() == 1) {
+                if (squareModel.isKing())
+                    paintPiece("whiteKing.png", g);
                 else
-                paintPiece("pieceWhite.png",g);
+                    paintPiece("pieceWhite.png", g);
             }
             if (squareModel.getIdPLayer() == 2)
-                if(squareModel.isKing())
-                    paintPiece("blackKing.png",g);
+                if (squareModel.isKing())
+                    paintPiece("blackKing.png", g);
                 else
-                paintPiece("blackPiece.png",g);
+                    paintPiece("blackPiece.png", g);
+
+            if(squareModel.getIdPLayer() == 0 && squareModel.isMutable()) {
+                int padding= 48;
+                g.setColor(new Color(212, 137, 137));
+                g.fillOval(padding/2, padding/2, getWidth()-padding, getHeight()-padding);
+//                g.fillOval(20, 20, 50, 50);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
         g.setColor(Color.RED);
-//        int padding= 24;
-//        g.fillOval(padding/2, padding/2, getWidth()-padding, getHeight()-padding);
+
     }
 
     public BufferedImage resizeImg(BufferedImage img, int newW, int newH) {
@@ -83,7 +81,7 @@ public class SquarePanel extends JPanel {
 
     public void paintPiece(String pathImage, Graphics g) throws IOException {
         BufferedImage image = ImageIO.read(new File(pathImage));
-        image = resizeImg(image,70,70);
+        image = resizeImg(image, 70, 70);
         g.drawImage(image, getWidth() / 2 - image.getWidth() / 2, getHeight() / 2 - image.getHeight() / 2, null);
     }
 }
