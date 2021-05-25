@@ -13,7 +13,7 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class ClientApp extends JFrame {
-    String serverAddress = "127.0.0.1"; // The server's IP address
+    String serverAddress = "5.56.79.21"; // The server's IP address
     int PORT = 31401; // The server's port
     Socket socket = null;
 
