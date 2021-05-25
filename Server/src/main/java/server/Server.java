@@ -10,7 +10,7 @@ import java.net.SocketTimeoutException;
 public class Server {
     DataUtil data;
     //     Define the port on which the server is listening
-    public static final int PORT = 31401;
+    public static final int PORT = 54273;
 
     public Server() throws IOException {
         DataUtil dataUtil = new DataUtil();
