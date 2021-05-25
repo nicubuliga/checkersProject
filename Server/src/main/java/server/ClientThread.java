@@ -9,6 +9,10 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 
+/*
+    Thread-ul care are grija de desfasurarea jocului intre 2 clienti reali
+ */
+
 class ClientThread extends Thread {
     private Socket socket1 = null;
     private Socket socket2 = null;

@@ -66,23 +66,23 @@ public class Controller implements Runnable {
     }
 
     public void selectSquare(SquareModel squareModel) {
-        if (selectedSquares.isEmpty() && squareModel.getIdPLayer() != 0) {
+        if (selectedSquares.isEmpty() && squareModel.getIdPLayer() == this.idPlayer) {
             addToSelected(squareModel);
-        }
-        else {
+        } else {
             System.out.println(playableSquares);
             if (playableSquares.contains(squareModel)) {
-                for(SquareModel square : playableSquares) {
+                for (SquareModel square : playableSquares) {
                     square.setMutable(false);
                 }
                 //move
                 move(selectedSquares.get(0), squareModel);
             } else {
                 deselectSquare();
-                addToSelected(squareModel);
+
+                if (squareModel.getIdPLayer() == this.idPlayer)
+                    addToSelected(squareModel);
             }
         }
-
 
 
     }
@@ -107,11 +107,9 @@ public class Controller implements Runnable {
         selectedSquares.add(squareModel);
         getPlayableSquares(squareModel);
 
-        if(squareModel.getIdPLayer() != 0) {
-            for (SquareModel square : playableSquares) {
-                square.setMutable(true);
+        for (SquareModel square : playableSquares) {
+            square.setMutable(true);
 
-            }
         }
 
         boardPanel.repaint();
@@ -165,11 +163,11 @@ public class Controller implements Runnable {
         }
     }
 
-    private void checkKing(SquareModel from, SquareModel movedSquare){
-        if(from.isKing()){
+    private void checkKing(SquareModel from, SquareModel movedSquare) {
+        if (from.isKing()) {
             movedSquare.setKing(true);
             from.setKing(false);
-        }else if(movedSquare.getRow()==7 || movedSquare.getRow()==0){
+        } else if (movedSquare.getRow() == 7 || movedSquare.getRow() == 0) {
             movedSquare.setKing(true);
         }
     }
@@ -185,10 +183,9 @@ public class Controller implements Runnable {
 
     }
 
-    private void makeMoveFromServer(int from, int to)
-    {
-        SquareModel fromSquare = boardPanel.getBoardModel().getSquare(from/10 , from % 10);
-        SquareModel toSquare = boardPanel.getBoardModel().getSquare(to/10 , to % 10);
+    private void makeMoveFromServer(int from, int to) {
+        SquareModel fromSquare = boardPanel.getBoardModel().getSquare(from / 10, from % 10);
+        SquareModel toSquare = boardPanel.getBoardModel().getSquare(to / 10, to % 10);
 
         toSquare.setIdPLayer(fromSquare.getIdPLayer());
         fromSquare.setIdPLayer(0);
@@ -198,7 +195,7 @@ public class Controller implements Runnable {
     }
 
     private void displayMessage(String message) {
-        JOptionPane.showMessageDialog(frame,"You are " + message);
+        JOptionPane.showMessageDialog(frame, "You are " + message);
 
         frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
     }
@@ -215,7 +212,7 @@ public class Controller implements Runnable {
                     out.println("ok");
                     out.flush();
                 } else if (response.equals("turn")) {
-                    if(args.length > 1) {
+                    if (args.length > 1) {
                         makeMoveFromServer(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
                     }
                     waitingForAction = true;

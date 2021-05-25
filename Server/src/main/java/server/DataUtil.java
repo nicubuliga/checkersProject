@@ -6,6 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/*
+    Un obiect de tip DataUtil va mentine o coada a clientilor si
+    perechile de clienti care sunt intr-un joc curent
+ */
+
 public class DataUtil {
     List<Socket> socketList = new ArrayList<>();
     Map<Socket,Socket> socketPairs = new HashMap<>();

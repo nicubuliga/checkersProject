@@ -10,6 +10,10 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 
+/*
+    Thread-ul care are grija de desfasurarea jocului intre un client si un jucator AI
+ */
+
 public class AIThread extends Thread{
     private Socket socket1 = null;
     private Board gameBoard;
