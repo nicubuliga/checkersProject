@@ -77,7 +77,8 @@ public class ClientApp extends JFrame {
                     }
                     connect();
                 } catch (IOException exception) {
-                    exception.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Server connection error!",
+                            "Error", JOptionPane.ERROR_MESSAGE, null);
                 }
             }
         });
